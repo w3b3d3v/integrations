@@ -1,6 +1,10 @@
 const functions = require("firebase-functions");
 const { getDatabase } = require("firebase-admin/database");
 const fetch = require("node-fetch");
+const {
+  notifyIfPendingTransaction,
+  sendTreasuryDataToDiscord,
+} = require("./discordNotifications");
 
 var admin = require("firebase-admin");
 admin.initializeApp();
@@ -76,3 +80,6 @@ exports.saveDiscordData = functions.https.onRequest(
     response.send("OK");
   }
 );
+
+exports.notifyIfPendingTransaction = notifyIfPendingTransaction;
+exports.sendTreasuryDataToDiscord = sendTreasuryDataToDiscord;
