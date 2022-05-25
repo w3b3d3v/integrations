@@ -19,13 +19,15 @@ function sendDiscordMessage(content, avatar_url) {
 exports.notifyIfPendingTransaction = functions.https.onRequest((req, res) => {
   const url = `https://safe-client.gnosis.io/v1/chains/137/safes/${process.env.TREASUARY_ADDRESS}/transactions/queued`;
   axios.get(url).then((resp) => {
-    console.log(resp);
-    if (resp.results && resp.results.length > 0) {
+    if (resp.data && resp.data.results && resp.data.results.length > 0) {
+      const results = resp.data.results.filter((r) => r.type === "TRANSACTION");
       return sendDiscordMessage(
         "🚨🚨 TRANSAÇÃO PENDENTE! APROVAR!!! 🚨🚨",
         "https://i.imgur.com/OyQ6ued.png"
       ).then((d) => {
-        return res.status(200).json({ ok: 200, notified: "Pendentes!" });
+        return res
+          .status(200)
+          .json({ ok: 200, notified: "Pendentes!", results });
       });
     } else {
       return res.status(200).json({ ok: 200, notified: "Nada pendente" });
