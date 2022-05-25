@@ -11,9 +11,7 @@ function sendBalanceToDiscord(balance) {
 }
 
 function sendDiscordMessage(content, avatar_url) {
-  const url =
-    "https://discord.com/api/webhooks/929867423790792734/UWmqIMfteaXneingARC2eO7ezmoJ9ooUPN2XAA3mUAw005pZ3psKneT6PmSi1iOwkrl5";
-  return axios.post(url, { content, avatar_url });
+  return axios.post(process.env.DISCORD_WEBHOOK, { content, avatar_url });
 }
 
 exports.notifyIfPendingTransaction = functions.https.onRequest((req, res) => {
